@@ -28,3 +28,6 @@ hs_err_pid*
 
 # Target
 /**/target/
+
+# H2 database files
+*.db
