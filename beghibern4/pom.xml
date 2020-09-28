@@ -11,6 +11,7 @@
     <modules>
         <module>dummymodule</module>
         <module>ch02config</module>
+        <module>ch03simple</module>
     </modules>
 
     <name>beghibern4</name>
