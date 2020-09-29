@@ -1,6 +1,13 @@
 Beginning Hibernate 5
 =====================
 
+Chapter 3: Building a Simple Application
+----------------------------------------
+* Mark entity with @Entity annotation
+* Mark columns with @Column annotation
+* Add artificial key with @Id and @GeneratedValue annotation
+* Use HQL for reading data
+
 Chapter 2: Integrating and Configuring Hibernate
 ------------------------------------------------
 * Using hibernate.cfg.xml to configure Hibernate
