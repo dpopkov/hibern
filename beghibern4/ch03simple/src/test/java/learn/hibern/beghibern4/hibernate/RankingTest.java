@@ -68,6 +68,26 @@ public class RankingTest {
         assertEquals(average, 7);
     }
 
+    @Test
+    public void changeRanking() {
+        populateRankingData();
+        try (Session session = factory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            Query<Ranking> query = session.createQuery("from Ranking r "
+                    + "where r.subject.name=:subject and "
+                    + "r.observer.name=:observer and "
+                    + "r.skill.name=:skill", Ranking.class);
+            query.setParameter("subject", "J. C. Smell");
+            query.setParameter("observer", "Gene Showrama");
+            query.setParameter("skill", "Java");
+            Ranking ranking = query.uniqueResult();
+            assertNotNull(ranking, "Could not find matching ranking");
+            ranking.setRanking(9);
+            tx.commit();
+        }
+        assertEquals(getAverage("J. C. Smell", "Java"), 8);
+    }
+
     private Person findPerson(Session session, String name) {
         Query<Person> query = session.createQuery("from Person p where p.name=:name", Person.class);
         query.setParameter("name", name);
@@ -122,5 +142,22 @@ public class RankingTest {
         ranking.setSkill(skill);
         ranking.setRanking(rank);
         session.save(ranking);
+    }
+
+    private int getAverage(String subjectName, String skillName) {
+        try (Session session = factory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            Query<Ranking> query = session.createQuery("from Ranking r "
+                    + "where r.subject.name=:subject and "
+                    + "r.skill.name=:skill", Ranking.class);
+            query.setParameter("subject", subjectName);
+            query.setParameter("skill", skillName);
+            IntSummaryStatistics stats = query.list()
+                    .stream()
+                    .collect(Collectors.summarizingInt(Ranking::getRanking));
+            int average = (int) stats.getAverage();
+            tx.commit();
+            return average;
+        }
     }
 }
