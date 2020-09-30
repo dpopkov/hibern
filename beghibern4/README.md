@@ -7,6 +7,7 @@ Chapter 3: Building a Simple Application
 * Mark columns with @Column annotation
 * Add artificial key with @Id and @GeneratedValue annotation
 * Use HQL for reading data
+* Add util module containing SessionUtil singleton
 
 Chapter 2: Integrating and Configuring Hibernate
 ------------------------------------------------
