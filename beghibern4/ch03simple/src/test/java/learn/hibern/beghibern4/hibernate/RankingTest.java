@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import static org.testng.Assert.*;
 
+@SuppressWarnings("SameParameterValue")
 public class RankingTest {
     private SessionFactory factory;
 
@@ -88,6 +89,19 @@ public class RankingTest {
         assertEquals(getAverage("J. C. Smell", "Java"), 8);
     }
 
+    @Test
+    public void removeRanking() {
+        populateRankingData();
+        try (Session session = factory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            Ranking ranking = findRanking(session, "J. C. Smell", "Drew Lombardo", "Java");
+            assertNotNull(ranking, "Ranking not found");
+            session.delete(ranking);
+            tx.commit();
+        }
+        assertEquals(getAverage("J. C. Smell", "Java"), 6);
+    }
+
     private Person findPerson(Session session, String name) {
         Query<Person> query = session.createQuery("from Person p where p.name=:name", Person.class);
         query.setParameter("name", name);
@@ -97,6 +111,17 @@ public class RankingTest {
     private Skill findSkill(Session session, String name) {
         Query<Skill> query = session.createQuery("from Skill s where s.name=:name", Skill.class);
         query.setParameter("name", name);
+        return query.uniqueResult();
+    }
+
+    private Ranking findRanking(Session session, String subjectName, String observerName, String skillName) {
+        Query<Ranking> query = session.createQuery("from Ranking r "
+                + "where r.subject.name=:subject and "
+                + "r.observer.name=:observer and "
+                + "r.skill.name=:skill", Ranking.class);
+        query.setParameter("subject", subjectName);
+        query.setParameter("observer", observerName);
+        query.setParameter("skill", skillName);
         return query.uniqueResult();
     }
 
