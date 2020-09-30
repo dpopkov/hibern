@@ -59,6 +59,29 @@ public class HibernateRankingService implements RankingService {
         session.save(ranking);
     }
 
+    @Override
+    public void updateRanking(String subjectName, String observerName, String skillName, int rank) {
+        try (Session session = SessionUtil.openSession()) {
+            Transaction tx = session.beginTransaction();
+            Ranking ranking = findRanking(session, subjectName, observerName, skillName);
+            if (ranking == null) {
+                addRanking(session, subjectName, observerName, skillName, rank);
+            } else {
+                ranking.setRanking(rank);
+            }
+            tx.commit();
+        }
+    }
+
+    @Override
+    public void removeRanking(String subject, String observer, String skill) {
+        try (Session session = SessionUtil.openSession()) {
+            Transaction tx = session.beginTransaction();
+            removeRanking(session, subject, observer, skill);
+            tx.commit();
+        }
+    }
+
     private Person savePerson(Session session, String name) {
         Person person = findPerson(session, name);
         if (person == null) {
@@ -89,5 +112,23 @@ public class HibernateRankingService implements RankingService {
         Query<Skill> query = session.createQuery("from Skill s where s.name=:name", Skill.class);
         query.setParameter("name", name);
         return query.uniqueResult();
+    }
+
+    private Ranking findRanking(Session session, String subjectName, String observerName, String skillName) {
+        Query<Ranking> query = session.createQuery("from Ranking r "
+                + "where r.subject.name=:subject and "
+                + "r.observer.name=:observer and "
+                + "r.skill.name=:skill", Ranking.class);
+        query.setParameter("subject", subjectName);
+        query.setParameter("observer", observerName);
+        query.setParameter("skill", skillName);
+        return query.uniqueResult();
+    }
+
+    private void removeRanking(Session session, String subject, String observer, String skill) {
+        Ranking ranking = findRanking(session, subject, observer, skill);
+        if (ranking != null) {
+            session.delete(ranking);
+        }
     }
 }

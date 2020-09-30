@@ -9,6 +9,7 @@ Chapter 3: Building a Simple Application
 * Use HQL for reading data
 * Add util module containing SessionUtil singleton
 * Create RankingService with methods for adding and getting Ranking
+* Add methods for updating and removing to RankingService
 
 Chapter 2: Integrating and Configuring Hibernate
 ------------------------------------------------
