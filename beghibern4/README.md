@@ -10,6 +10,7 @@ Chapter 3: Building a Simple Application
 * Add util module containing SessionUtil singleton
 * Create RankingService with methods for adding and getting Ranking
 * Add methods for updating and removing to RankingService
+* Add methods for finding all rankings for a subject and highest ranked subject
 
 Chapter 2: Integrating and Configuring Hibernate
 ------------------------------------------------

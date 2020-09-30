@@ -8,7 +8,10 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
 
+import java.util.HashMap;
 import java.util.IntSummaryStatistics;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HibernateRankingService implements RankingService {
@@ -80,6 +83,64 @@ public class HibernateRankingService implements RankingService {
             removeRanking(session, subject, observer, skill);
             tx.commit();
         }
+    }
+
+    @Override
+    public Map<String, Integer> findRankingsFor(String subject) {
+        try (Session session = SessionUtil.openSession()) {
+            Transaction tx = session.beginTransaction();
+            Map<String, Integer> result = findRankingsFor(session, subject);
+            tx.commit();
+            return result;
+        }
+    }
+
+    @Override
+    public Person findBestPersonFor(String skill) {
+        Person person;
+        try (Session session = SessionUtil.openSession()) {
+            Transaction tx = session.beginTransaction();
+            person = findBestPersonFor(session, skill);
+            tx.commit();
+        }
+        return person;
+    }
+
+    private Person findBestPersonFor(Session session, String skill) {
+        Query<Object[]> query = session.createQuery("select r.subject.name, avg(r.ranking)"
+                + " from Ranking r where "
+                + "r.skill.name=:skill "
+                + "group by r.subject.name "
+                + "order by avg(r.ranking) desc", Object[].class);
+        query.setParameter("skill", skill);
+        List<Object[]> result = query.list();
+        if (result.size() > 0) {
+            String subjectName = (String) result.get(0)[0];
+            return findPerson(session, subjectName);
+        }
+        return null;
+    }
+
+    private Map<String, Integer> findRankingsFor(Session session, String subject) {
+        Map<String, Integer> resultMap = new HashMap<>();
+        Query<Ranking> query = session.createQuery("from Ranking r "
+                        + "where r.subject.name=:name order by r.skill.name", Ranking.class);
+        query.setParameter("name", subject);
+        List<Ranking> list = query.list();
+        String lastSkill = "";
+        int count = 0;
+        int sum = 0;
+        for (Ranking r : list) {
+            if (!lastSkill.equals(r.getSkill().getName())) {
+                count = 0;
+                sum = 0;
+                lastSkill = r.getSkill().getName();
+            }
+            sum += r.getRanking();
+            count++;
+            resultMap.put(r.getSkill().getName(), sum / count);
+        }
+        return resultMap;
     }
 
     private Person savePerson(Session session, String name) {
