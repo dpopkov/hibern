@@ -20,6 +20,8 @@
         <!-- Mapping -->
         <mapping class="learn.hibern.beghibern4.ch04lifecycle.broken.Message"/>
         <mapping class="learn.hibern.beghibern4.ch04lifecycle.broken.Email"/>
+        <mapping class="learn.hibern.beghibern4.ch04lifecycle.mapped.Message"/>
+        <mapping class="learn.hibern.beghibern4.ch04lifecycle.mapped.Email"/>
 
     </session-factory>
 </hibernate-configuration>
