@@ -1,6 +1,10 @@
 Beginning Hibernate 5
 =====================
 
+Chapter 4: The Persistence Life Cycle
+-------------------------------------
+* Entities and Associations: Example of broken association without an owning object.
+
 Chapter 3: Building a Simple Application
 ----------------------------------------
 * Mark entity with @Entity annotation

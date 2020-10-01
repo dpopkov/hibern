@@ -18,6 +18,8 @@
         <property name="c3p0.timeout">10</property>
 
         <!-- Mapping -->
+        <mapping class="learn.hibern.beghibern4.ch04lifecycle.broken.Message"/>
+        <mapping class="learn.hibern.beghibern4.ch04lifecycle.broken.Email"/>
 
     </session-factory>
 </hibernate-configuration>
