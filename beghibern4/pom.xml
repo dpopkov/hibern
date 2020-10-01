@@ -13,6 +13,7 @@
         <module>ch02config</module>
         <module>ch03simple</module>
         <module>util</module>
+        <module>ch04lifecycle</module>
     </modules>
 
     <name>beghibern4</name>
