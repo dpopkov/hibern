@@ -8,6 +8,7 @@ Chapter 4: The Persistence Life Cycle
 * Saving Entities.
 * Object Equality and Identity. Loading Entities.
 * Merging and Refreshing Entities.
+* Cascading Operations, Orphan Removal.
 
 Chapter 3: Building a Simple Application
 ----------------------------------------

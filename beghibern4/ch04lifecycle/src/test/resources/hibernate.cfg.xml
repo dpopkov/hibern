@@ -23,6 +23,8 @@
         <mapping class="learn.hibern.beghibern4.ch04lifecycle.mapped.Message"/>
         <mapping class="learn.hibern.beghibern4.ch04lifecycle.mapped.Email"/>
         <mapping class="learn.hibern.beghibern4.ch04lifecycle.general.SimpleObject"/>
+        <mapping class="learn.hibern.beghibern4.ch04lifecycle.orphan.Book"/>
+        <mapping class="learn.hibern.beghibern4.ch04lifecycle.orphan.Library"/>
 
     </session-factory>
 </hibernate-configuration>
