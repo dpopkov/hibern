@@ -6,6 +6,7 @@ Chapter 4: The Persistence Life Cycle
 * Entities and Associations: Example of broken association without an owning object.
 * Entities and Associations: Example of mapped association with an owning object.
 * Saving Entities.
+* Object Equality and Identity. Loading Entities.
 
 Chapter 3: Building a Simple Application
 ----------------------------------------

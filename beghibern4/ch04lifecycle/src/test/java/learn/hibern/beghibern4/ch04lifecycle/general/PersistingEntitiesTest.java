@@ -10,8 +10,8 @@ import static org.testng.Assert.*;
 public class PersistingEntitiesTest {
 
     @Test
-    public void testSave() {
-        Long id = null;
+    public void testSaveLoad() {
+        Long id;
         SimpleObject obj;
 
         try (Session session = SessionUtil.openSession()) {
@@ -26,6 +26,23 @@ public class PersistingEntitiesTest {
             id = obj.getId();
 
             tx.commit();
+        }
+
+        try (Session session = SessionUtil.openSession()) {
+            SimpleObject o2 = session.load(SimpleObject.class, id);
+            assertEquals(o2.getKey(), "s1");
+            assertNotNull(o2.getValue());
+            assertEquals(o2.getValue().longValue(), 10L);
+
+            SimpleObject o3 = session.load(SimpleObject.class, id);
+            // since o3 and o2 were loaded in the same session, they're not only
+            // equivalent - as shown by equals() - but equal, as shown by ==.
+            // since obj was NOT loaded in this session, it's equivalent but
+            // not ==.
+            assertEquals(o2, o3);
+            assertEquals(obj, o2);
+            assertSame(o2, o3);
+            assertNotSame(o2, obj);
         }
     }
 
